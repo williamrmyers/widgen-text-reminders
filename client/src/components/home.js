@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
+import SubHeader from './subheader';
+
 class Home extends React.Component {
   state = {
       error: undefined,
@@ -48,6 +50,7 @@ class Home extends React.Component {
               <div className="hero">
                 <div className="hero-body">
                   <div className="container has-text-centered content">
+                    <SubHeader />
                     <h3>Boom</h3>
                     <p>Your now logged in and requesting data from the server.</p>
                     <p>{this.state.text}</p>
