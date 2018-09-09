@@ -3,12 +3,16 @@ require('./config/config.js');
 const express = require('express');
 const _ = require('lodash');
 const bodyParser = require('body-parser');
+const {ObjectID} = require('mongodb');
 const path = require('path');
 
 
-let {mongoose} = require('./db/mongoose');
-let {User} = require('./models/user');
-let {authenticate} = require('./middleware/authenticate');
+const {mongoose} = require('./db/mongoose');
+const {authenticate} = require('./middleware/authenticate');
+// Models
+const {User} = require('./models/user');
+const {Customer} = require('./models/customer');
+const {Appointment} = require('./models/appointment');
 
 let app = express();
 const port = process.env.PORT;
@@ -107,7 +111,7 @@ app.patch(`/users/password_change`, authenticate, (req, res) => {
 
 app.delete(`/users/me`, authenticate, (req, res) => {
   req.user.remove().then((user) => {
-    res.status(200).send(user);
+    res.status(200).send({user}, {id: req.user._id});
   }, () => {
     res.status(400).send();
   });
@@ -116,11 +120,108 @@ app.delete(`/users/me`, authenticate, (req, res) => {
 app.delete(`/users/me/token`, authenticate, (req, res) => {
   req.user.removeToken(req.token).then(() => {
     res.status(200).send();
-  }, () => {
+  }).catch((e)=>{
     res.status(400).send();
   });
 });
 
+// Customer routes
+app.get('/customers', authenticate, async (req, res) => {
+  await Customer.find({ _owner: req.user._id }).then((customers)=>{
+    res.send({customers});
+  }).catch((e)=>{
+    res.status(400).send(e);
+  });
+});
+
+app.post(`/customer`, authenticate, (req, res) =>{
+  // let body = _.pick(req.body, ['email', 'phone', 'first_name', 'last_name']);
+  // let customer = new Customer(body);
+
+  const customer = new Customer({
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    phone: req.body.phone,
+    _owner: req.user._id
+  });
+
+  try {
+        customer.save().then((doc) => {
+          return res.status(200).send(doc);
+        })
+      }
+  catch (e) {
+    return res.status(404).send({});
+  }
+});
+
+app.patch(`/customer/:id`, authenticate, async (req, res) => {
+   const id = req.params.id;
+   const body = _.pick(req.body, ['first_name', 'last_name', 'email', 'phone']);
+
+   if (!ObjectID.isValid(id)) {
+     return res.status(404).send({});
+   }
+
+  await Customer.findOneAndUpdate({_id: id, _owner: req.user._id}, {$set: body}).then((doc)=>{
+     if (!doc) {
+       return res.status(404).send();
+     }
+     // success case
+     res.send({doc});
+   }).catch(()=>{
+     res.status(400).send();
+   })
+});
+
+
+app.delete(`/customer/:id`, authenticate, async (req, res) => {
+  const id = req.params.id;
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send({});
+  }
+  try {
+    const customer = await Customer.findOneAndRemove({
+      _id: id,
+      _owner: req.user._id
+    });
+    if (!customer) {
+      return res.status(404).send({});
+    }
+    res.status(200).send({customer});
+  } catch (e) {
+    return res.status(400).send({});
+  }
+});
+
+app.post(`/appointment`, authenticate, (req, res) =>{
+  // let body = _.pick(req.body, ['email', 'phone', 'first_name', 'last_name']);
+  // let customer = new Customer(body);
+
+  const appointment = new Appointment({
+    date: req.body.date,
+  _owner: req.user._id,
+  message: req.body.message,
+  customer: req.body.customer
+  });
+
+  if (!ObjectID.isValid(appointment.customer)) {
+    return res.status(404).send({});
+  }
+
+  try {
+        appointment.save().then((doc) => {
+          res.status(200).send(doc);
+        })
+      }
+  catch (e) {
+    res.status(404).send({});
+  }
+});
+
+
+// Server built react on production.
 if (process.env.NODE_ENV === 'production') {
   const publicPath = path.join(__dirname, '../client/build');
   // Sets path for HTML
