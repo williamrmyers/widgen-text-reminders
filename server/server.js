@@ -13,6 +13,7 @@ const {authenticate} = require('./middleware/authenticate');
 const {User} = require('./models/user');
 const {Customer} = require('./models/customer');
 const {Appointment} = require('./models/appointment');
+const {Message} = require('./models/message');
 
 let app = express();
 const port = process.env.PORT;
@@ -134,21 +135,21 @@ app.get('/customers', authenticate, async (req, res) => {
   });
 });
 
-app.post(`/customer`, authenticate, (req, res) =>{
-  // let body = _.pick(req.body, ['email', 'phone', 'first_name', 'last_name']);
+app.post(`/customer`, authenticate, async (req, res) =>{
+  let body = _.pick(req.body, ['first_name', 'last_name', 'email', 'phone']);
   // let customer = new Customer(body);
 
   const customer = new Customer({
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    email: req.body.email,
-    phone: req.body.phone,
+    first_name: body.first_name,
+    last_name: body.last_name,
+    email: body.email,
+    phone: body.phone,
     _owner: req.user._id
   });
 
   try {
-        customer.save().then((doc) => {
-          return res.status(200).send(doc);
+        await customer.save().then((doc) => {
+          res.status(200).send(doc);
         })
       }
   catch (e) {
@@ -195,15 +196,36 @@ app.delete(`/customer/:id`, authenticate, async (req, res) => {
   }
 });
 
-app.post(`/appointment`, authenticate, (req, res) =>{
-  // let body = _.pick(req.body, ['email', 'phone', 'first_name', 'last_name']);
+app.get('/appointment/:id', authenticate, async (req, res) => {
+  const id = req.params.id
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send({});
+  }
+
+  await Appointment.findOne({
+    _id: id,
+    _owner: req.user._id
+  }).then((appointment) => {
+    if (!appointment) {
+      return res.status(404).send({});
+    }
+    // Success case
+    res.status(200).send({appointment});
+  }).catch((e) => {
+    res.status(404).send();
+  });
+});
+
+app.post(`/appointment`, authenticate, async (req, res) =>{
+  let body = _.pick(req.body, ['date', 'message', 'customer']);
   // let customer = new Customer(body);
 
   const appointment = new Appointment({
-    date: req.body.date,
+    date: body.date,
   _owner: req.user._id,
-  message: req.body.message,
-  customer: req.body.customer
+  message: body.message,
+  customer: body.customer
   });
 
   if (!ObjectID.isValid(appointment.customer)) {
@@ -211,7 +233,7 @@ app.post(`/appointment`, authenticate, (req, res) =>{
   }
 
   try {
-        appointment.save().then((doc) => {
+        await appointment.save().then((doc) => {
           res.status(200).send(doc);
         })
       }
@@ -220,6 +242,143 @@ app.post(`/appointment`, authenticate, (req, res) =>{
   }
 });
 
+app.patch(`/appointment/:id`, authenticate, async (req, res) => {
+   const id = req.params.id;
+   const body = _.pick(req.body, ['date', 'message', 'email', 'customer']);
+
+   if (!ObjectID.isValid(id)) {
+     return res.status(404).send({});
+   }
+
+  await Appointment.findOneAndUpdate({_id: id, _owner: req.user._id}, {$set: body}).then((doc)=>{
+     if (!doc) {
+       return res.status(404).send();
+     }
+     // success case
+     res.send({doc});
+   }).catch(()=>{
+     res.status(400).send();
+   })
+});
+
+
+app.delete(`/appointment/:id`, authenticate, async (req, res) => {
+  const id = req.params.id;
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send({});
+  }
+  try {
+    const appointment = await Appointment.findOneAndRemove({
+      _id: id,
+      _owner: req.user._id
+    });
+    if (!appointment) {
+      return res.status(404).send({});
+    }
+    res.status(200).send({appointment});
+  } catch (e) {
+    return res.status(400).send({});
+  }
+});
+
+app.get('/appointments', authenticate, async (req, res) => {
+  await Appointment.find({ _owner: req.user._id }).then((appointments)=>{
+    res.send({appointments});
+  }).catch((e)=>{
+    res.status(400).send(e);
+  });
+});
+
+// Message Routes
+// GET /message/:id (PAGINATION) (QUERY)
+app.get('/message/:id', authenticate, (req, res) => {
+  const id = req.params.id
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send({});
+  }
+
+  Message.findOne({
+    _id: id,
+    _owner: req.user._id
+  }).then((message) => {
+    if (!message) {
+      return res.status(404).send({});
+    }
+    // Success case
+    res.status(200).send({message});
+  }).catch((e) => {
+    res.status(404).send();
+  });
+});
+
+// GET /messages
+app.get('/messages', authenticate, async (req, res) => {
+  await Message.find({ _owner: req.user._id }).then((messages)=>{
+    res.send({messages});
+  }).catch((e)=>{
+    res.status(400).send(e);
+  });
+});
+
+// POST /message
+app.post(`/message`, authenticate, async (req, res) =>{
+  const body = _.pick(req.body, ['title', 'message']);
+
+  const message = new Message({
+    title: body.title,
+    message: body.message,
+    _owner: req.user._id
+  });
+
+  try {
+        await message.save().then((doc) => {
+          res.status(200).send(doc);
+        })
+      }
+  catch (e) {
+    return res.status(404).send({});
+  }
+});
+// PATCH /message
+app.patch(`/message/:id`, authenticate, async (req, res) => {
+   const id = req.params.id;
+   const body = _.pick(req.body, [ 'message', 'title']);
+
+   if (!ObjectID.isValid(id)) {
+     return res.status(404).send({});
+   }
+
+  await Message.findOneAndUpdate({_id: id, _owner: req.user._id}, {$set: body}).then((doc)=>{
+     if (!doc) {
+       return res.status(404).send();
+     }
+     // success case
+     res.send({doc});
+   }).catch(()=>{
+     res.status(400).send();
+   })
+});
+
+// DELETE /message
+app.delete(`/message/:id`, authenticate, async (req, res) => {
+  const id = req.params.id;
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send({});
+  }
+  try {
+    const message = await Message.findOneAndRemove({
+      _id: id,
+      _owner: req.user._id
+    });
+    if (!appointment) {
+      return res.status(404).send({});
+    }
+    res.status(200).send({message});
+  } catch (e) {
+    res.status(400).send({});
+  }
+});
 
 // Server built react on production.
 if (process.env.NODE_ENV === 'production') {
