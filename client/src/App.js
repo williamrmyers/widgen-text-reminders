@@ -9,12 +9,12 @@ import Header from './components/header';
 import Private from './components/private';
 import Signup from './components/signup';
 import Login from './components/login';
+import Customers from './components/customers';
+import Messages from './components/messages';
 import Settings from './components/settings';
 import NotFound from './components/notFound';
 
 // Currently App.js will contain the router.
-
-let isAuthenticated = false;
 
 // This function serves to tell the routes whether the user is autheticated or not
 // And manages the cookies.
@@ -49,9 +49,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 )
 
 class AppRouter extends Component {
-  constructor() {
-    super();
-  }
 
   state = {
     token: false,
@@ -150,6 +147,22 @@ class NewRouter extends Component {
           />
         );
     };
+    const customers = (props) => {
+      return (
+        <Customers
+          {...props}
+          {...this.props}
+        />
+      );
+  };
+    const messages = (props) => {
+      return (
+        <Messages
+          {...props}
+          {...this.props}
+        />
+      );
+  };
     return (
       <BrowserRouter>
         <div>
@@ -158,6 +171,8 @@ class NewRouter extends Component {
           <Route exact path='/' component={home}/>
           <Route exact path='/signup' component={signup}/>
           <Route exact path='/login' component={login}/>
+          <PrivateRoute exact path='/customers' component={customers}/>
+          <PrivateRoute exact path='/messages' component={messages}/>
           <PrivateRoute exact path='/settings' component={settings}/>
           <Route component={NotFound}/>
         </Switch>

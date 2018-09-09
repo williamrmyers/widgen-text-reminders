@@ -41,6 +41,20 @@ class Header extends React.Component {
                         </button>
                       </p>
                       <p className="control">
+                        <NavLink to="customers">
+                        <button className="button Normal is-outlined">
+                          <span>Customers</span>
+                        </button>
+                        </NavLink>
+                      </p>
+                      <p className="control">
+                        <NavLink to="messages">
+                        <button className="button Normal is-outlined">
+                          <span>Messages</span>
+                        </button>
+                        </NavLink>
+                      </p>
+                      <p className="control">
                         <NavLink to="settings">
                         <button className="button Normal is-outlined">
                           <span>Settings</span>
