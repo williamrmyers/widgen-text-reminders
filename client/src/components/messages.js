@@ -1,25 +1,28 @@
 import React from 'react';
+import axios from 'axios';
 
 class Messages extends React.Component {
 
-  // getMembersData = () => {
-  //   const authHeaders = {
-  //     headers: {'x-auth': this.props.token }
-  //   };
-  //
-  //   axios.get('/members', authHeaders)
-  //     .then((response) => {
-  //       this.setData(response.data)
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //   });
-  // }
-
-  componentWillMount() {
-
+  state = {
+    messages: []
   }
+
+  getMessages = () => {
+    const authHeaders = {
+      headers: {'x-auth': this.props.token }
+    };
+  axios.get('/messages', authHeaders)
+    .then((res) => {
+      this.setState(() => ({ messages: res.data.messages }))
+    })
+    .catch((error) => {
+      console.log(error);
+  });
+}
+
+componentWillMount() {
+  this.getMessages()
+}
 
   render() {
     return (
@@ -29,6 +32,9 @@ class Messages extends React.Component {
               <div className="hero-body">
                 <div className="container has-text-centered content">
                   <p>This is the Messages component.</p>
+                    <ul>
+                      {this.state.messages.map(message => (<li key={message._id}> <h4>{message.title}</h4> <br></br> <p>{message.message}</p></li>))}
+                    </ul>
                 </div>
               </div>
             </div>

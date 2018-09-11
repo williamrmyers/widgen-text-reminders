@@ -3,39 +3,26 @@ import axios from 'axios';
 
 class Home extends React.Component {
   state = {
-      error: undefined,
-      text: undefined,
       token: undefined,
-      kittens: []
+      appointments: []
   };
 
-  setData = (data) => {
-    this.setState(() => ({
-      text: data.text,
-      kittens: data.image
-    }));
-  }
-
-  getMembersData = () => {
+  getAppointments = () => {
     const authHeaders = {
       headers: {'x-auth': this.props.token }
     };
-
-    axios.get('/members', authHeaders)
-      .then((response) => {
-        this.setData(response.data)
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-    });
-  }
+  axios.get('/appointments', authHeaders)
+    .then((res) => {
+      this.setState(() => ({ appointments: res.data.appointments }))
+    })
+    .catch((error) => {
+      console.log(error);
+  });
+}
 
   componentWillMount() {
-    console.log('home ',this.props.isAuthenticated, this.props.token);
-
     if (this.props.isAuthenticated) {
-      this.getMembersData();
+      this.getAppointments();
     }
   }
 
@@ -48,12 +35,10 @@ class Home extends React.Component {
               <div className="hero">
                 <div className="hero-body">
                   <div className="container has-text-centered content">
-                    <h3>Boom</h3>
-                    <p>Your now logged in and requesting data from the server.</p>
-                    <p>{this.state.text}</p>
-                    <img src={this.state.kittens[0]} alt="Another Cute Kitten"/>
-                    <br/>
-                    <img src={this.state.kittens[2]} alt="Another Cute Kitten"/>
+                    <h3>Appointments</h3>
+                      <ul>
+                        {this.state.appointments.map(appointment => (<li key={appointment._id}><p>{appointment.message} at {appointment.date}</p></li>))}
+                      </ul>
                   </div>
                 </div>
               </div>

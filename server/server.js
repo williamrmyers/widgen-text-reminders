@@ -28,17 +28,6 @@ app.use(function(req, res, next) {
 
 app.use(bodyParser.json());
 
-app.get('/members', authenticate, (req, res)=>{
-  res.send({
-    text:`These kittens are only avalable to members!`,
-    image:[
-      'https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif',
-      'https://media.giphy.com/media/5kjsIIc47PKRq/giphy.gif',
-      'https://media.giphy.com/media/GKnJPvJh59ywg/giphy.gif'
-      ]
-  });
-});
-
 app.post('/users', (req, res) => {
   let body = _.pick(req.body, ['email', 'password', 'first_name', 'last_name']);
   let user = new User(body);

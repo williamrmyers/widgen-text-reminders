@@ -1,24 +1,28 @@
 import React from 'react';
+import axios from 'axios';
 
 class Customers extends React.Component {
 
-  // getMembersData = () => {
-  //   const authHeaders = {
-  //     headers: {'x-auth': this.props.token }
-  //   };
-  //
-  //   axios.get('/members', authHeaders)
-  //     .then((response) => {
-  //       this.setData(response.data)
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //   });
-  // }
+  state = {
+    customers: []
+  }
+
+  getCustomers = () => {
+    const authHeaders = {
+      headers: {'x-auth': this.props.token }
+    };
+
+    axios.get('/customers', authHeaders)
+      .then((res) => {
+        this.setState(() => ({ customers: res.data.customers }))
+      })
+      .catch((error) => {
+        console.log(error);
+    });
+  }
 
   componentWillMount() {
-
+    this.getCustomers()
   }
 
   render() {
@@ -30,6 +34,9 @@ class Customers extends React.Component {
                   <div className="hero-body">
                     <div className="container has-text-centered content">
                       <p>This is the Customers component.</p>
+                      <ul>
+                        {this.state.customers.map(customer => (<li key={customer._id}>{customer.first_name} {customer.last_name} Number: {customer.phone}</li>))}
+                      </ul>
                     </div>
                   </div>
                 </div>
