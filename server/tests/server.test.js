@@ -31,8 +31,8 @@ const users = [{
 // Populate DB
 const populateUsers = (done) => {
   User.remove({}).then(() => {
-    let userOne = new User(users[0]).save();
-    let userTwo = new User(users[1]).save();
+    const userOne = new User(users[0]).save();
+    const userTwo = new User(users[1]).save();
 
 
     return Promise.all([userOne, userTwo])
@@ -88,8 +88,8 @@ describe('GET /users/me', () => {
 
 describe(`POST to /users`, () => {
   it('should create a user.', (done) => {
-    let email = 'example@example.com';
-    let password = '123mnb!';
+    const email = 'example@example.com';
+    const password = '123mnb!';
 
     request(app)
       .post('/users')

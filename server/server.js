@@ -15,7 +15,7 @@ const {Customer} = require('./models/customer');
 const {Appointment} = require('./models/appointment');
 const {Message} = require('./models/message');
 
-let app = express();
+const app = express();
 const port = process.env.PORT;
 
 app.use(function(req, res, next) {
@@ -29,8 +29,8 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 
 app.post('/users', (req, res) => {
-  let body = _.pick(req.body, ['email', 'password', 'first_name', 'last_name']);
-  let user = new User(body);
+  const body = _.pick(req.body, ['email', 'password', 'first_name', 'last_name']);
+  const user = new User(body);
 
   user.save().then((user) => {
     return user.generateAuthToken();
@@ -46,7 +46,7 @@ app.post('/users', (req, res) => {
 });
 
 app.post(`/users/login`, (req, res) => {
-  let body = _.pick(req.body, ['email', 'password']);
+  const body = _.pick(req.body, ['email', 'password']);
 
   User.findByCredentials(body.email, body.password).then((user) => {
     return user.generateAuthToken().then((token) => {
@@ -67,7 +67,7 @@ app.get(`/users/me`, authenticate, (req, res) => {
 
 // Changes user data besides password
 app.patch(`/users/me`, authenticate, (req, res) => {
-  let body = _.pick(req.body, ['email', 'first_name', 'last_name']);
+  const body = _.pick(req.body, ['email', 'first_name', 'last_name']);
 
   return User.findOneAndUpdate({_id: req.user._id}, {$set: body}, {new: true}).then((user)=>{
   if (!user) {
@@ -83,7 +83,7 @@ app.patch(`/users/me`, authenticate, (req, res) => {
 
 app.patch(`/users/password_change`, authenticate, (req, res) => {
 
-  let body = _.pick(req.body, ['password']);
+  const body = _.pick(req.body, ['password']);
 
   req.user.changePassword().then((password) => {
     // console.log(user);
@@ -125,8 +125,7 @@ app.get('/customers', authenticate, async (req, res) => {
 });
 
 app.post(`/customer`, authenticate, async (req, res) =>{
-  let body = _.pick(req.body, ['first_name', 'last_name', 'email', 'phone']);
-  // let customer = new Customer(body);
+  const body = _.pick(req.body, ['first_name', 'last_name', 'email', 'phone']);
 
   const customer = new Customer({
     first_name: body.first_name,
@@ -207,8 +206,7 @@ app.get('/appointment/:id', authenticate, async (req, res) => {
 });
 
 app.post(`/appointment`, authenticate, async (req, res) =>{
-  let body = _.pick(req.body, ['date', 'message', 'customer']);
-  // let customer = new Customer(body);
+  const body = _.pick(req.body, ['date', 'message', 'customer']);
 
   const appointment = new Appointment({
     date: body.date,
