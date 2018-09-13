@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
+import Calender from './calender';
+
 class Home extends React.Component {
   state = {
       token: undefined,
@@ -15,7 +17,7 @@ getAppointments = () => {
   };
   axios.get('/appointments', authHeaders)
     .then((res) => {
-      this.setState(() => ({ appointments: res.data.appointments }))
+      this.setState(() => ({ appointments: res.data.appointments }));
     })
     .catch((error) => {
       console.log(error);
@@ -125,6 +127,7 @@ getCustomers = () => {
                   </div>
                 </div>
               </div>
+              <Calender />
             </section>
           )
           :
