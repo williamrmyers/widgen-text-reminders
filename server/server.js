@@ -210,9 +210,9 @@ app.post(`/appointment`, authenticate, async (req, res) =>{
 
   const appointment = new Appointment({
     date: body.date,
-  _owner: req.user._id,
-  message: body.message,
-  customer: body.customer
+    _owner: req.user._id,
+    message: body.message,
+    customer: body.customer
   });
 
   if (!ObjectID.isValid(appointment.customer)) {

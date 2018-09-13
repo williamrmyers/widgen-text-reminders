@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import moment from 'moment';
 
 import Calender from './calender';
 
@@ -8,7 +9,8 @@ class Home extends React.Component {
       token: undefined,
       appointments: [],
       messages: [],
-      customers: []
+      customers: [],
+      events: []
   };
 // Appointments handelers
 getAppointments = () => {
@@ -18,6 +20,10 @@ getAppointments = () => {
   axios.get('/appointments', authHeaders)
     .then((res) => {
       this.setState(() => ({ appointments: res.data.appointments }));
+      // EVents for calender
+      const events = res.data.appointments.map(appointment => ({ id: appointment._id, title: appointment.message, start: new Date(appointment.date), end: (moment(appointment.date).add(1, 'hours').toDate()) }));
+      this.setState(() => ({ events }));
+      console.log(events);
     })
     .catch((error) => {
       console.log(error);
@@ -31,7 +37,7 @@ postAppointments = () => {
   };
   const body = {
   	"message":"Meet with William",
-  	"date": 1536465944,
+  	"date": new Date(),
   	"customer": "5b92f34860687de21bcdbea4"
   }
 
@@ -127,7 +133,9 @@ getCustomers = () => {
                   </div>
                 </div>
               </div>
-              <Calender />
+              <Calender
+                events={this.state.events}
+                />
             </section>
           )
           :

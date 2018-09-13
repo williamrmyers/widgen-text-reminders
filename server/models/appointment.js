@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Appointment = mongoose.model('appointments', {
   date: {
-    type: Number,
+    type: Date,
     minlength: 1,
     required: true,
     trim: true

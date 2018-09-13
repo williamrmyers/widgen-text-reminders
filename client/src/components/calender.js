@@ -117,12 +117,12 @@ class Calender extends React.Component {
 
   render() {
     return (
-      <div style={{ height: 700 }}>
+      <div style={{ height: 600 }}>
         <BigCalendar
-          events={events}
+          events={this.props.events}
           step={60}
-          defaultView={"month"}
-          views={["day", "agenda", "month"]}
+          defaultView={"week"}
+          views={["day", "agenda", "month", "week"]}
           showMultiDayTimes
           defaultDate={new Date()}
         />
