@@ -20,8 +20,8 @@ getAppointments = () => {
   axios.get('/appointments', authHeaders)
     .then((res) => {
       this.setState(() => ({ appointments: res.data.appointments }));
-      // EVents for calender
-      const events = res.data.appointments.map(appointment => ({ id: appointment._id, title: appointment.message, start: new Date(appointment.date), end: (moment(appointment.date).add(1, 'hours').toDate()) }));
+      // Events for calender
+      const events = res.data.appointments.map(appointment => ({ id: appointment._id, title: appointment.text, start: new Date(appointment.start), end: new Date(appointment.start) }));
       this.setState(() => ({ events }));
       console.log(events);
     })
@@ -36,9 +36,31 @@ postAppointments = () => {
     headers: { 'x-auth': this.props.token }
   };
   const body = {
-  	"message":"Meet with William",
-  	"date": new Date(),
+  	"text": "Meet with Jacky",
+  	"start": new Date(),
+    "end": moment().add(1, 'hours').toDate(),
   	"customer": "5b92f34860687de21bcdbea4"
+  }
+
+  axios.post('/appointment', body, authHeaders).then((res)=>{
+      this.getAppointments();
+  }).catch((error)=>{
+    console.log(error);
+  });
+}
+postAppointments2 = (e) => {
+  e.preventDefault();
+
+  const authHeaders = {
+    headers: { 'x-auth': this.props.token }
+  };
+  const el = e.target.elements;
+
+  const body = {
+  	"text": el.text.value.trim(),
+  	"start": el.start.value.trim(),
+    "end": el.end.value.trim(),
+  	"customer": el.customer.value.trim()
   }
 
   axios.post('/appointment', body, authHeaders).then((res)=>{
@@ -126,8 +148,24 @@ getCustomers = () => {
                 <div className="hero-body">
                   <div className="container has-text-centered content">
                     <h3>Appointments</h3>
+                    <form onSubmit = {this.postAppointments2}>
+                      <label> Text
+                        <input name='text' type='text'></input>
+                      </label>
+                      <label> Start Time
+                      <input name='start' type="datetime-local"></input>
+                      </label>
+                      <label>
+                        End Time
+                        <input name='end' type="datetime-local"></input>
+                      </label>
+                      <label> Customer
+                      <input name='customer' type='text'></input>
+                      </label>
+                      <button type='submit' value="submit">Submit</button>
+                    </form>
                       <ul>
-                        {this.state.appointments.map(appointment => (<li key={appointment._id}><p>{appointment.message} at {appointment.date}<button id={appointment._id} onClick={this.handleDelete}>Delete</button></p></li>))}
+                        {this.state.appointments.map(appointment => (<li key={appointment._id}><p>{appointment.text} at {appointment.start}<button id={appointment._id} onClick={this.handleDelete}>Delete</button></p></li>))}
                       </ul>
                       <button onClick={this.postAppointments}>Add Appointment</button>
                   </div>

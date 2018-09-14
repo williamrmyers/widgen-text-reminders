@@ -206,12 +206,13 @@ app.get('/appointment/:id', authenticate, async (req, res) => {
 });
 
 app.post(`/appointment`, authenticate, async (req, res) =>{
-  const body = _.pick(req.body, ['date', 'message', 'customer']);
+  const body = _.pick(req.body, ['start', 'end', 'text', 'customer']);
 
   const appointment = new Appointment({
-    date: body.date,
+    start: body.start,
+    end: body.end,
     _owner: req.user._id,
-    message: body.message,
+    text: body.text,
     customer: body.customer
   });
 
@@ -231,7 +232,7 @@ app.post(`/appointment`, authenticate, async (req, res) =>{
 
 app.patch(`/appointment/:id`, authenticate, async (req, res) => {
    const id = req.params.id;
-   const body = _.pick(req.body, ['date', 'message', 'email', 'customer']);
+   const body = _.pick(req.body, ['start', 'end', 'text', 'email', 'customer']);
 
    if (!ObjectID.isValid(id)) {
      return res.status(404).send({});

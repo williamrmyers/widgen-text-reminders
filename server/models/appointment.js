@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 
 const Appointment = mongoose.model('appointments', {
-  date: {
+  start: {
+    type: Date,
+    minlength: 1,
+    required: true,
+    trim: true
+  },
+  end: {
     type: Date,
     minlength: 1,
     required: true,
@@ -14,7 +20,7 @@ const Appointment = mongoose.model('appointments', {
   customer: {
     type: mongoose.Schema.Types.ObjectId
   },
-  message: {
+  text: {
     type: String,
     trim: true,
     minlength: 1
