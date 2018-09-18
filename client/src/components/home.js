@@ -4,6 +4,7 @@ import moment from 'moment';
 import Modal from 'react-modal';
 
 import Calender from './calender';
+import EventForm from './event-form';
 
 const customStyles = {
   content : {
@@ -24,7 +25,9 @@ class Home extends React.Component {
       messages: [],
       customers: [],
       events: [],
-      modalIsOpen: true
+      modalIsOpen: false,
+      formStart: false,
+      formEnd: false
   };
 // Appointments handelers
 getAppointments = () => {
@@ -84,6 +87,21 @@ postAppointments2 = (e) => {
   });
 }
 
+postAppointments3 = (body) => {
+  const authHeaders = {
+    headers: { 'x-auth': this.props.token }
+  };
+
+  console.log('postAppointments3', body);
+  axios.post('/appointment', body, authHeaders).then((res)=>{
+      alert('Appointment Created')
+      this.toggleModal();
+      this.getAppointments();
+  }).catch((error)=>{
+    console.log(error);
+  });
+}
+
 patchAppointments = (id, name) => {
   const authHeaders = {
     headers: { 'x-auth': this.props.token }
@@ -137,7 +155,7 @@ getCustomers = () => {
 
   axios.get('/customers', authHeaders)
     .then((res) => {
-      this.setState(() => ({ customers: res.data.customers }))
+      this.setState(() => ({ customers: res.data.customers }));
     })
     .catch((error) => {
       console.log(error);
@@ -151,6 +169,8 @@ createAppointment = (data) => {
   // Select Customer
   // Select Message for Notific ation
   // Create Appointments
+  this.setState(() => ({ formStart: data.slots[0], formEnd: data.slots[1]}));
+  this.toggleModal()
   console.log(data);
 }
 
@@ -159,7 +179,11 @@ modifyAppointment = (data) => {
 }
 
 closeModal = () => {
-  this.setState(() => ({modalIsOpen: false}))
+  this.setState(() => ({modalIsOpen: false}));
+}
+
+toggleModal = (state) => {
+  this.setState(() => ({ modalIsOpen: this.state.modalIsOpen ? false : true }))
 }
 
   componentWillMount() {
@@ -206,11 +230,12 @@ closeModal = () => {
                   </div>
                 </div>
               </div>
-              <Calender
-                events={this.state.events}
-                createAppointment={this.createAppointment}
-                modifyAppointment={this.modifyAppointment}
-                />
+              { this.state.appointments ? (
+                <Calender
+                  events={this.state.events}
+                  createAppointment={this.createAppointment}
+                  modifyAppointment={this.modifyAppointment}
+                  />) : false}
                 <Modal
                   isOpen={this.state.modalIsOpen}
                   // onAfterOpen={this.afterOpenModal}
@@ -218,7 +243,14 @@ closeModal = () => {
                   style={customStyles}
                   contentLabel="Example Modal"
                 >
-                  <button onClick={this.closeModal}>close</button>
+                  <EventForm
+                    messages={this.state.messages}
+                    customers={this.state.customers}
+                    postAppointments={this.postAppointments3}
+                    formStart={this.state.formStart}
+                    formEnd={this.state.formEnd}
+                    />
+                  <button onClick={this.toggleModal}>close</button>
                 </Modal>
             </section>
           )
@@ -229,7 +261,6 @@ closeModal = () => {
               <div className="hero-body">
                 <div className="container has-text-centered content">
                     <h1 className="big-header">Welcome!</h1>
-                    <img src="https://media.giphy.com/media/CY9jl58dVtU2s/giphy.gif" alt="Cute Kitten"/>
                 </div>
               </div>
             </div>

@@ -13,6 +13,8 @@
     "react-dom": "^16.4.1",
     "react-modal": "^3.4.5",
     "react-router-dom": "^4.2.2",
+    "semantic-ui-css": "^2.4.0",
+    "semantic-ui-react": "^0.82.5",
     "universal-cookie": "^2.2.0"
   },
   "scripts": {
