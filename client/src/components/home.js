@@ -1,8 +1,21 @@
 import React from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import Modal from 'react-modal';
 
 import Calender from './calender';
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
 
 class Home extends React.Component {
   state = {
@@ -10,7 +23,8 @@ class Home extends React.Component {
       appointments: [],
       messages: [],
       customers: [],
-      events: []
+      events: [],
+      modalIsOpen: true
   };
 // Appointments handelers
 getAppointments = () => {
@@ -130,6 +144,24 @@ getCustomers = () => {
   });
 }
 
+createAppointment = (data) => {
+  // Display Modal
+  // Select Start Time
+  // Select End Time
+  // Select Customer
+  // Select Message for Notific ation
+  // Create Appointments
+  console.log(data);
+}
+
+modifyAppointment = (data) => {
+  console.log(data);
+}
+
+closeModal = () => {
+  this.setState(() => ({modalIsOpen: false}))
+}
+
   componentWillMount() {
     if (this.props.isAuthenticated) {
       this.getAppointments();
@@ -151,17 +183,20 @@ getCustomers = () => {
                     <form onSubmit = {this.postAppointments2}>
                       <label> Text
                         <input name='text' type='text'></input>
-                      </label>
+                      </label><br></br>
                       <label> Start Time
-                      <input name='start' type="datetime-local"></input>
-                      </label>
+                        <input name='start' type="datetime-local"></input>
+                      </label><br></br>
                       <label>
                         End Time
                         <input name='end' type="datetime-local"></input>
-                      </label>
+                      </label><br></br>
                       <label> Customer
-                      <input name='customer' type='text'></input>
-                      </label>
+                        <input name='customer' type='text'></input>
+                      </label><br></br>
+                      <label> Notify user an Hour before meeting.
+                        <input name='notifyUser' type='radio' value="" defaultChecked></input>
+                      </label><br></br>
                       <button type='submit' value="submit">Submit</button>
                     </form>
                       <ul>
@@ -173,7 +208,18 @@ getCustomers = () => {
               </div>
               <Calender
                 events={this.state.events}
+                createAppointment={this.createAppointment}
+                modifyAppointment={this.modifyAppointment}
                 />
+                <Modal
+                  isOpen={this.state.modalIsOpen}
+                  // onAfterOpen={this.afterOpenModal}
+                  // onRequestClose={this.closeModal}
+                  style={customStyles}
+                  contentLabel="Example Modal"
+                >
+                  <button onClick={this.closeModal}>close</button>
+                </Modal>
             </section>
           )
           :

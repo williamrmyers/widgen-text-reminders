@@ -7,36 +7,3 @@ div.formBox {
     max-width:500px;
     margin: auto;
 }
-
-/*subheader*/
-.subheader nav {
-    /*font-size: 2rem;
-    background-color: #f1f1f1;*/
-}
-.subheader nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    /* justify-content: space-around; */
-}
-
-.subheader nav ul li {
-    cursor: pointer;
-    flex: auto;
-    text-align: center;
-}
-
-.subheader nav ul li:hover {
-    /*background-color: #555;
-    color: white;*/
-}
-
-@media all and (max-width: 400px) {
-    .subheader nav ul {
-        flex-direction: column;
-    }
-    .subheader nav ul li {
-        text-align: center;
-    }
-}

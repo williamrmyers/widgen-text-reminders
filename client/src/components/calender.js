@@ -125,6 +125,9 @@ class Calender extends React.Component {
           views={["day", "agenda", "month", "week"]}
           showMultiDayTimes
           defaultDate={new Date()}
+          selectable={true}
+          onSelectEvent={this.props.modifyAppointment}
+          onSelectSlot={this.props.createAppointment}
         />
       </div>
     );
