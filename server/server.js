@@ -206,19 +206,20 @@ app.get('/appointment/:id', authenticate, async (req, res) => {
 });
 
 app.post(`/appointment`, authenticate, async (req, res) =>{
-  const body = _.pick(req.body, ['start', 'end', 'text', 'customer']);
+  const body = _.pick(req.body, ['start', 'end', 'text', 'customer', 'message']);
 
   const appointment = new Appointment({
     start: body.start,
     end: body.end,
     _owner: req.user._id,
     text: body.text,
-    customer: body.customer
+    customer: body.customer,
+    message: body.message
   });
 
-  if (!ObjectID.isValid(appointment.customer)) {
-    return res.status(404).send({});
-  }
+  // if (!ObjectID.isValid(appointment.customer) && !ObjectID.isValid(appointment.message)) {
+  //   return res.status(404).send({});
+  // }
 
   try {
         await appointment.save().then((doc) => {

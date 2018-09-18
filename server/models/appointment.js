@@ -20,10 +20,21 @@ const Appointment = mongoose.model('appointments', {
   customer: {
     type: mongoose.Schema.Types.ObjectId
   },
+  message: {
+    type: mongoose.Schema.Types.ObjectId
+  },
   text: {
     type: String,
     trim: true,
     minlength: 1
+  },
+  reminderSent: {
+    type: Boolean,
+    default: false
+  },
+  note: {
+    type: String,
+    trim: true
   }
 });
 
