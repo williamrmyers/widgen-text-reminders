@@ -38,7 +38,7 @@ getAppointments = () => {
     .then((res) => {
       this.setState(() => ({ appointments: res.data.appointments }));
       // Events for calender
-      const events = res.data.appointments.map(appointment => ({ id: appointment._id, title: appointment.text, start: new Date(appointment.start), end: new Date(appointment.start) }));
+      const events = res.data.appointments.map(appointment => ({ id: appointment._id, title: appointment.text, start: new Date(appointment.start), end: new Date(appointment.end) }));
       this.setState(() => ({ events }));
       console.log(events);
     })
@@ -91,9 +91,7 @@ postAppointments3 = (body) => {
     headers: { 'x-auth': this.props.token }
   };
 
-  console.log('postAppointments3', body);
   axios.post('/appointment', body, authHeaders).then((res)=>{
-      alert('Appointment Created')
       this.toggleModal();
       this.getAppointments();
   }).catch((error)=>{
@@ -129,8 +127,9 @@ deleteAppointments = (id) => {
   });
 }
 
-handleDelete = (e) => {
-  const id = e.target.id;
+handleDelete = (data) => {
+  const id = data.id;
+  console.log(id);
   this.deleteAppointments(id);
 }
 
@@ -162,15 +161,9 @@ getCustomers = () => {
 }
 
 createAppointment = (data) => {
-  // Display Modal
-  // Select Start Time
-  // Select End Time
-  // Select Customer
-  // Select Message for Notific ation
-  // Create Appointments
-  this.setState(() => ({ formStart: data.slots[0], formEnd: data.slots[1]}));
+  this.setState(() => ({ formStart: data.start, formEnd: data.end}));
   this.toggleModal();
-  console.log(data);
+  console.log('Created:',data);
 }
 
 modifyAppointment = (data) => {
@@ -205,6 +198,7 @@ toggleModal = (state) => {
                   events={this.state.events}
                   createAppointment={this.createAppointment}
                   modifyAppointment={this.modifyAppointment}
+                  handleDelete={this.handleDelete}
                   />
                 <Modal
                   isOpen={this.state.modalIsOpen}

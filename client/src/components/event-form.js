@@ -4,12 +4,7 @@ import 'semantic-ui-css/semantic.min.css';
 import moment from 'moment';
 
 class EventForm extends React.Component {
-  componentWillMount() {
-    // console.log('Cust!',this.props.customers);
-    // const parsedCustomers = this.props.customers.map(customer => ({ value: customer._id, text: `${customer.first_name} ${customer.last_name} ${customer.phone}` }));
-    // console.log(parsedCustomers);
-    // this.setState({ parsedCustomers });
-  }
+  componentWillMount() {}
   state = {
     perdict: "",
   }

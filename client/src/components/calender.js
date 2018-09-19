@@ -19,7 +19,7 @@ class Calender extends React.Component {
           defaultView={"week"}
           views={["day", "agenda", "week", "month"]}
           defaultDate={new Date()}
-          onSelectEvent={this.props.modifyAppointment}
+          onSelectEvent={this.props.handleDelete}
           onSelectSlot={this.props.createAppointment}
         />
       </div>
