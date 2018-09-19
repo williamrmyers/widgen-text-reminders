@@ -16,12 +16,11 @@ class Calender extends React.Component {
           showMultiDayTimes={false}
           events={this.props.events}
           step={60}
-          defaultView={"day"}
+          defaultView={"week"}
           views={["day", "agenda", "week", "month"]}
           defaultDate={new Date()}
-          // onSelectEvent={this.props.modifyAppointment}
-          // onSelectSlot={this.props.createAppointment}
-          onSelectSlot={event => alert(event.start, event.end)}
+          onSelectEvent={this.props.modifyAppointment}
+          onSelectSlot={this.props.createAppointment}
         />
       </div>
     );

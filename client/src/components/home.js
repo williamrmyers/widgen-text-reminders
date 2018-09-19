@@ -47,7 +47,6 @@ getAppointments = () => {
   });
 }
 
-
 postAppointments = () => {
   const authHeaders = {
     headers: { 'x-auth': this.props.token }
@@ -170,12 +169,14 @@ createAppointment = (data) => {
   // Select Message for Notific ation
   // Create Appointments
   this.setState(() => ({ formStart: data.slots[0], formEnd: data.slots[1]}));
-  this.toggleModal()
+  this.toggleModal();
   console.log(data);
 }
 
 modifyAppointment = (data) => {
+  this.setState(() => ({ formStart: data.start, formEnd: data.end }));
   console.log(data);
+  this.toggleModal();
 }
 
 closeModal = () => {
@@ -199,60 +200,29 @@ toggleModal = (state) => {
       <div>
         {this.props.isAuthenticated?
           (
-            <section className="section">
-              <div className="hero">
-                <div className="hero-body">
-                  <div className="container has-text-centered content">
-                    <h3>Appointments</h3>
-                    <form onSubmit = {this.postAppointments2}>
-                      <label> Text
-                        <input name='text' type='text'></input>
-                      </label><br></br>
-                      <label> Start Time
-                        <input name='start' type="datetime-local"></input>
-                      </label><br></br>
-                      <label>
-                        End Time
-                        <input name='end' type="datetime-local"></input>
-                      </label><br></br>
-                      <label> Customer
-                        <input name='customer' type='text'></input>
-                      </label><br></br>
-                      <label> Notify user an Hour before meeting.
-                        <input name='notifyUser' type='radio' value="" defaultChecked></input>
-                      </label><br></br>
-                      <button type='submit' value="submit">Submit</button>
-                    </form>
-                      <ul>
-                        {this.state.appointments.map(appointment => (<li key={appointment._id}><p>{appointment.text} at {appointment.start}<button id={appointment._id} onClick={this.handleDelete}>Delete</button></p></li>))}
-                      </ul>
-                      <button onClick={this.postAppointments}>Add Appointment</button>
-                  </div>
-                </div>
-              </div>
-              { this.state.appointments ? (
+            <div>
                 <Calender
                   events={this.state.events}
                   createAppointment={this.createAppointment}
                   modifyAppointment={this.modifyAppointment}
-                  />) : false}
+                  />
                 <Modal
                   isOpen={this.state.modalIsOpen}
                   // onAfterOpen={this.afterOpenModal}
                   // onRequestClose={this.closeModal}
                   style={customStyles}
-                  contentLabel="Example Modal"
+                  contentLabel="Create or modify Appointment modal."
                 >
-                  <EventForm
-                    messages={this.state.messages}
-                    customers={this.state.customers}
-                    postAppointments={this.postAppointments3}
-                    formStart={this.state.formStart}
-                    formEnd={this.state.formEnd}
-                    />
+                <EventForm
+                  messages={this.state.messages}
+                  customers={this.state.customers}
+                  postAppointments={this.postAppointments3}
+                  formStart={this.state.formStart}
+                  formEnd={this.state.formEnd}
+                  />
                   <button onClick={this.toggleModal}>close</button>
                 </Modal>
-            </section>
+            </div>
           )
           :
           (
