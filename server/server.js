@@ -101,8 +101,8 @@ app.patch(`/users/password_change`, authenticate, (req, res) => {
 
 app.delete(`/users/me`, authenticate, (req, res) => {
   req.user.remove().then((user) => {
-    res.status(200).send({user}, {id: req.user._id});
-  }, () => {
+    res.status(200).send({user});
+  }).catch((e)=>{
     res.status(400).send();
   });
 });
