@@ -33,8 +33,8 @@ class EventForm extends React.Component {
 
   selectMessage = (e, { value }) => this.setState({ message: value });
 
-  perdictName = (customer) => {
-    const title = `Appointment with ${customer}.`;
+  perdictName = (customer, prevState) => {
+    const title = `Appointment with ${this.state.customer}.`;
       this.setState({ perdict: title });
   };
 
@@ -62,6 +62,7 @@ class EventForm extends React.Component {
           <Form.Field required control={Select} fluid search selection label='Customer' options={parsedCustomers} onChange={this.selectCustomer} placeholder='Customer' />
           <Form.Field required control={Select} fluid search selection label='Message' options={parsedMessages} onChange={this.selectMessage} placeholder='Message' />
           <Button secondary type='submit'>Submit</Button>
+          <Button onClick={this.props.toggleModal} >Close</Button>
         </Form>
       </div>
     );

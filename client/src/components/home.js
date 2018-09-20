@@ -213,8 +213,8 @@ toggleModal = (state) => {
                   postAppointments={this.postAppointments3}
                   formStart={this.state.formStart}
                   formEnd={this.state.formEnd}
+                  toggleModal={this.toggleModal}
                   />
-                  <button onClick={this.toggleModal}>close</button>
                 </Modal>
             </div>
           )
