@@ -12,7 +12,6 @@ class Login extends React.Component {
     const formElements = e.target.elements;
     const email = formElements.email.value.trim();
     const password = formElements.password.value.trim();
-    const error = false;
 
     // // Submit to server
     axios.post('/users/login', {
