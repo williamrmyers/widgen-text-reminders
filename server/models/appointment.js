@@ -18,7 +18,8 @@ const Appointment = mongoose.model('appointments', {
     required: true
   },
   customer: {
-    type: mongoose.Schema.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Customers'
   },
   message: {
     type: mongoose.Schema.Types.ObjectId
