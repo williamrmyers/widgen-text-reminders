@@ -17,7 +17,7 @@ const remind = async () => {
     .populate('customer')
     .exec();
 
-    appointmentsNextHour.map(app => sendTextMessage(app.customer.phone, `${app.customer.first_name} You have an Appointment at ${app.start} in an Hour.`, app._id) );
+    appointmentsNextHour.map(app => sendTextMessage(app.customer.phone, `${app.customer.first_name}! You have an Appointment in Hour with William.`, app._id) );
 
   } catch (e) {
     console.log(e);
