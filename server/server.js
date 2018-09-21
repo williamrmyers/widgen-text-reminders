@@ -16,9 +16,8 @@ const {Customer} = require('./models/customer');
 const {Appointment} = require('./models/appointment');
 const {Message} = require('./models/message');
 
-// Reminder
-// const {reminder} = require('./reminder/reminder');
-// reminder();
+// remind is checking every few minutes
+const {remind} = require('./utils/remind');
 
 const app = express();
 const port = process.env.PORT;
@@ -384,42 +383,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
   });
 }
-
-
-const accountSid = process.env.TWILIO_ACCOUNT_SID; // Your Account SID from www.twilio.com/console
-const authToken = process.env.TWILIO_AUTH_TOKEN;   // Your Auth Token from www.twilio.com/console
-
-const twilio = require('twilio');
-const client = new twilio(accountSid, authToken);
-// Reminder
-const getAppointments = async () => {
-  try {
-    const appointmentsNextHour = await Appointment.find({ "reminderSent": false, "start":{ $gte: new Date(), $lt: moment().add(4, 'hour').toDate() } })
-    .populate('customer')
-    .exec();
-    console.log(appointmentsNextHour);
-
-    appointmentsNextHour.map(app => sendTextMessage(app.customer.phone, `${app.customer.first_name} You have an Appointment at ${app.start} in an Hour.`) );
-
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-
-const sendTextMessage = (number, message, id) => {
-  console.log(`Reminder sent to ${number}`, message);
-
-  client.messages.create({
-    body: message,
-    to: number,  // Text this number
-    from: process.env.MY_PHONE_NUMBER // From a valid Twilio number
-  })
-  .then((message) => console.log(message.sid))
-  .catch((e) => {console.log(e)});
-}
-
-setInterval(getAppointments, 60*1000);
 
 app.listen(port, ()=>{
   console.log(`App started on port ${port}`);
