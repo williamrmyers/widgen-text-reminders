@@ -5,90 +5,6 @@ import axios from 'axios';
 class Messages extends React.Component {
 
   state = {
-    messages: []
-  }
-
-  getMessages = () => {
-    const authHeaders = {
-      headers: {'x-auth': this.props.token }
-    };
-  axios.get('/messages', authHeaders)
-    .then((res) => {
-      this.setState(() => ({ messages: res.data.messages }))
-    })
-    .catch((error) => {
-      this.error(error);
-  });
-}
-
-  postMessage = (body) => {
-    const authHeaders = {
-      headers: { 'x-auth': this.props.token }
-    };
-
-    axios.post('/message', body, authHeaders).then((res)=>{
-        this.getMessages();
-    }).catch((error)=>{
-      this.error(error);
-    });
-  }
-
-  handelPostMessage = (e) => {
-    const el = e.target.elements;
-    const title = el.reminderTitle.value.trim();
-    const message = el.reminderText.value.trim();
-    if (title && message) {
-      this.postMessage({ title, message});
-      el.reminderTitle.value = '';
-      el.reminderText.value = '';
-    }
-  }
-
-  error = (e) => {
-    alert(e);
-  }
-
-  componentWillMount() {
-    this.getMessages();
-  }
-
-  render() {
-    return (
-      <div>
-        <div>
-          <Form onSubmit={this.handelPostMessage}>
-            <Form.Field
-              id='form-input-control-reminder-title'
-              control={Input}
-              label='Reminder Title'
-              placeholder='Reminder Title'
-              name='reminderTitle'
-              required
-              width={6}
-            />
-            <Form.Field
-              id='form-textarea-control-opinion'
-              control={TextArea}
-              label='Reminder Text'
-              name='reminderText'
-              placeholder='Reminder Text'
-              required
-            />
-            <Form.Field id='form-button-control-public' control={Button} content='Save' />
-          </Form>
-        </div>
-
-        <ul>
-          {this.state.messages.map(message => (<li key={message._id}> <h4>{message.title}</h4> <br></br> <p>{message.message}</p></li>))}
-        </ul>
-      </div>
-    );
-  }
-}
-
-class Messages2 extends React.Component {
-
-  state = {
     messages: [],
     formVisible: false
   }
@@ -119,6 +35,8 @@ class Messages2 extends React.Component {
   }
 
   handelPostMessage = (e) => {
+    e.preventDefault();
+
     const el = e.target.elements;
     const title = el.reminderTitle.value.trim();
     const message = el.reminderText.value.trim();
@@ -129,12 +47,26 @@ class Messages2 extends React.Component {
     }
   }
 
+  deleteMessage = (id) => {
+    const authHeaders = {
+      headers: { 'x-auth': this.props.token }
+    };
+    axios.delete(`/message/${id}`, authHeaders).then((res)=>{
+        this.getMessages();
+    }).catch((error)=>{
+      this.error(`Coundn't delete message.`, error);
+      console.log(error);
+    });
+  }
+
   handelEdit = (e) => {
     console.log('handelEdit', e.target.id);
   }
 
   handelDelete = (e) => {
-    console.log('handelDelete', e.target.id);
+    const id = e.target.id;
+    console.log(id);
+    this.deleteMessage(id)
   }
 
   error = (e) => {
@@ -202,4 +134,4 @@ class Messages2 extends React.Component {
   }
 }
 
-export default Messages2;
+export default Messages;

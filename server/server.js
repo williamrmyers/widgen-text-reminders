@@ -364,7 +364,7 @@ app.delete(`/message/:id`, authenticate, async (req, res) => {
       _id: id,
       _owner: req.user._id
     });
-    if (!appointment) {
+    if (!message) {
       return res.status(404).send({});
     }
     res.status(200).send({message});
