@@ -7,3 +7,9 @@ div.formBox {
     max-width:500px;
     margin: auto;
 }
+
+div.addButtom {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+}
