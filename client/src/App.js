@@ -92,26 +92,25 @@ class AppRouter extends Component {
     try {
       const cookies = new Cookies();
       const token = cookies.get('auth');
-        // if (token) {
+        if (token) {
             const authHeaders = {
               headers: {'x-auth': token }
             };
-        // }
+            axios.get('/users/me', authHeaders)
+              .then((response) => {
+                this.setState(() => ({
+                  authenticated: true,
+                  token: token
+                }));
 
-      axios.get('/users/me', authHeaders)
-        .then((response) => {
-          this.setState(() => ({
-            authenticated: true,
-            token: token
-          }));
-
-          auth.authenticate(token, () => {
-            console.log(`Still logged in.`);
-          });
-        })
-        .catch((error) => {
-          console.log(`Not Logged in.`);
-        });
+                auth.authenticate(token, () => {
+                  console.log(`Still logged in.`);
+                });
+              })
+              .catch((error) => {
+                console.log(`Not Logged in.`);
+              });
+        }
     } catch (e) {
       console.log(e);
     }
