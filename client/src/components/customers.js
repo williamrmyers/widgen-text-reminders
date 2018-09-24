@@ -1,4 +1,5 @@
 import React from 'react';
+import { Container, Segment } from 'semantic-ui-react'
 import axios from 'axios';
 
 class Customers extends React.Component {
@@ -28,23 +29,18 @@ class Customers extends React.Component {
   render() {
     return (
       <div>
-          <div>
-              <section className="section">
-                <div className="hero">
-                  <div className="hero-body">
-                    <div className="container has-text-centered content">
-                      <p>This is the Customers component.</p>
-                      <ul>
-                        {this.state.customers.map(customer => (<li key={customer._id}>{customer.first_name} {customer.last_name} Number: {customer.phone}</li>))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </section>
-          </div>
+        <h1>Contacts</h1>
+        <Segment.Group raised>
+          {this.state.customers.map(customer => (<Segment key={customer._id}>{customer.first_name} {customer.last_name} {customer.phone}</Segment>))}
+        </Segment.Group>
       </div>
     );
   }
 }
 
 export default Customers;
+
+
+// <ul>
+//   {this.state.customers.map(customer => (<li key={customer._id}>{customer.first_name} {customer.last_name} Number: {customer.phone}</li>))}
+// </ul>
