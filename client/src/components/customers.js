@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Segment, Input, Header, Form } from 'semantic-ui-react'
+import { Container, Segment, Form } from 'semantic-ui-react'
 import axios from 'axios';
 
 class Customers extends React.Component {

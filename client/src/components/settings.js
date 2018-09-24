@@ -1,9 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+import { Container, Header, Button } from 'semantic-ui-react'
+import {Link} from 'react-router-dom';
+
 import NameChangeModal from './namechangemodal';
 import Confirmation from './reusableComponents/confirmation'
-import {Link} from 'react-router-dom';
+
 
 
 class Settings extends React.Component {
@@ -102,47 +105,37 @@ class Settings extends React.Component {
 
 render () {
   return (
-          <div>
-            <section className="section">
-                  <div className="hero">
-                    <div className="hero-body">
-                      <div className="container has-text-centered content">
-                        <h3>Your Profile</h3>
-                        <p>
-                          <strong>First Name:</strong> {this.state.firstName} <br/>
-                          <strong>Last Name:</strong> {this.state.lastName} <br/>
-                          <strong>Email</strong>: {this.state.email} <br/>
-                          <Link to='messages'>Messages</Link> <br></br>
-                          <a onClick={this.toggleNameModal} className="button">Change Info</a> <br/>
-                        </p>
-                      {this.state.deleteModalclosed?
-                        (<a onClick={this.toggleConfirmDeleteAccount} className="button">Delete Account</a>)
-                        :
-                        (<Confirmation
-                            yes={this.deleteAccount}
-                            no={this.toggleConfirmDeleteAccount}
-                            isOpen = {!this.state.deleteModalclosed}
-                            confirmationMessage={"Are you sure you want to delete your account?!"}
-                            yesButtonStyle='is-danger'
-                            />
-                        )
-                      }
-                      </div>
-                    </div>
-                  </div>
-                </section>
-                <NameChangeModal
-                  isOpen = {!this.state.NameChangeModalclosed}
-                  changeNameOnServer = {this.changeNameOnServer}
-                  toggleNameModal = {this.toggleNameModal}
-                  ClassName = 'MyModal'
-                  firstName = {this.state.firstName}
-                  lastName = {this.state.lastName}
-                  email = {this.state.email}
-                  />
+    <Container textAlign='center' text>
+      <Header as='h2'>Settings</Header>
+          <strong>First Name:</strong>{this.state.firstName}<br/>
+          <strong>Last Name:</strong>{this.state.lastName}<br/>
+          <strong>Email:</strong>{this.state.email}<br/>
+          <Button as={Link} to='messages'>Messages</Button><br/><br/>
+          <Button onClick={this.toggleNameModal}>Change Profile Info</Button><br/><br/>
 
-                { this.state.redirect ? <meta httpEquiv="refresh" content="0; URL='/'" /> : null}
-          </div>
-        )}
-      };
+            {this.state.deleteModalclosed?
+              (<Button onClick={this.toggleConfirmDeleteAccount}>Delete Account</Button>)
+              :
+              (<Confirmation
+                  yes={this.deleteAccount}
+                  no={this.toggleConfirmDeleteAccount}
+                  isOpen = {!this.state.deleteModalclosed}
+                  confirmationMessage={"Are you sure you want to delete your account?!"}
+                  />
+              )
+            }
+            <NameChangeModal
+              isOpen = {!this.state.NameChangeModalclosed}
+              changeNameOnServer = {this.changeNameOnServer}
+              toggleNameModal = {this.toggleNameModal}
+              ClassName = 'MyModal'
+              firstName = {this.state.firstName}
+              lastName = {this.state.lastName}
+              email = {this.state.email}
+              />
+
+          { this.state.redirect ? <meta httpEquiv="refresh" content="0; URL='/'" /> : null}
+    </Container>
+  )}
+};
 export default Settings;
