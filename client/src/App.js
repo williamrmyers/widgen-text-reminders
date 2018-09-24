@@ -6,7 +6,6 @@ import axios from 'axios';
 // Routes
 import Home from './components/home';
 import Header from './components/header';
-import Private from './components/private';
 import Signup from './components/signup';
 import Login from './components/login';
 import Customers from './components/customers';
@@ -87,6 +86,39 @@ class AppRouter extends Component {
       token: response.data.token,
       user: { email: response.data.email }
     }));
+  }
+  //this should make a request to the server to see if the token stored in the cookie is valid, and if so log us in.
+  checkIfAutheticated = () => {
+    try {
+      const cookies = new Cookies();
+      const token = cookies.get('auth');
+        // if (token) {
+            const authHeaders = {
+              headers: {'x-auth': token }
+            };
+        // }
+
+      axios.get('/users/me', authHeaders)
+        .then((response) => {
+          this.setState(() => ({
+            authenticated: true,
+            token: token
+          }));
+
+          auth.authenticate(token, () => {
+            console.log(`Still logged in.`);
+          });
+        })
+        .catch((error) => {
+          console.log(`Not Logged in.`);
+        });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  componentWillMount() {
+    this.checkIfAutheticated();
   }
 
   render() {
