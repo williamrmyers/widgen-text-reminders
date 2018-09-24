@@ -1,11 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
+import { Container, Header, Form, Button } from 'semantic-ui-react';
 
 class Signup extends React.Component {
   state = {
       error: undefined
   };
+  
   handelSignup = (e, props) => {
     e.preventDefault();
 
@@ -14,7 +16,6 @@ class Signup extends React.Component {
     const lastName = formElements.lastName.value.trim();
     const email = formElements.email.value.trim();
     const password = formElements.password.value.trim();
-    const error = false;
 
 
 
@@ -29,67 +30,32 @@ class Signup extends React.Component {
         this.props.handelSubmit(response)
       }).catch((e) => {
         console.log(`Error Logging in` + e);
-        this.setState(() => ({ error: "Error Signing up, please try again." }));
+        this.setState(() => ({ error: "There was an error Signing up, please try again." }));
       });
 
   }
   render() {
     return (
-      <div>
-        <section className="section">
-          <div className="container has-text-centered">
-            <div className="box formBox">
-
-            <h1 className="big-header">Sign Up!</h1>
-
-            <form onSubmit={this.handelSignup}>
-            <div className="field">
-              <label className="label">First Name</label>
-              <div className="control">
-                <input className="input" type="text" placeholder="First Name" name="firstName"/>
-              </div>
-            </div>
-
-            <div className="field">
-              <label className="label">Last Name</label>
-              <div className="controlclassName">
-                <input className="input" type="text" placeholder="Last Name" name="lastName"/>
-              </div>
-            </div>
-
-            <div className="field">
-              <label className="label">Email</label>
-              <div className="control has-icons-left has-icons-right">
-                <input className="input" type="email" placeholder="Email" name="email"/>
-                <span className="icon is-small is-left">
-                  <i className="fas fa-envelope"></i>
-                </span>
-              </div>
-              <p className="help">{this.state.error}</p>
-            </div>
-
-            <div className="field">
-              <label className="label">Password</label>
-              <p className="control has-icons-left">
-                <input className="input" type="password" placeholder="Password" autoComplete="true" name="password"/>
-                <span className="icon is-small is-left">
-                  <i className="fas fa-lock"></i>
-                </span>
-              </p>
-              <p className="help">{this.state.error}</p>
-            </div>
-
-            <div className="field is-grouped">
-              <div className="control">
-                <button className="button is-link">Submit</button>
-              </div>
-            </div>
-            </form>
-          </div>
-          </div>
-        </section>
-        { this.props.isAuthenticated ? <Redirect to='/' /> : null}
-      </div>
+        <Container text>
+          <Header as='h1'>Sign Up!</Header>
+          <Form onSubmit={this.handelSignup}>
+              <Form.Group widths='equal' >
+                <Form.Input required fluid label='First Name' name='firstName' placeholder='First Name' />
+                <Form.Input required fluid label='Last Name' name='lastName' placeholder='Last Name' />
+              </Form.Group>
+              <Form.Group widths='equal' >
+                <Form.Input required fluid label='Email' name='email' placeholder='email' />
+                <Form.Input required fluid type='password' name='password' label='Password' placeholder='password' />
+              </Form.Group>
+               <Form.Input fluid label='Company Name' name='company' placeholder='Company Name' />
+               <p className="help">{this.state.error}</p>
+               <Form.Group>
+            <Form.Button secondary>Submit</Form.Button>
+            <Link to='login'><Button >Login</Button></Link>
+            </Form.Group>
+          </Form>
+          { this.props.isAuthenticated ? <Redirect to='/' /> : null}
+        </Container>
     );
   }
 }

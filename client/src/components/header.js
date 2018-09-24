@@ -1,5 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Button, Dropdown, Menu } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css';
 
 class Header extends React.Component {
   state = {
@@ -92,4 +94,55 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+class App extends React.Component {
+  state = {
+    activeItem: 'home'
+  }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+
+  render() {
+    const { activeItem } = this.state
+
+    return (
+      <Menu size='small' inverted>
+        <Menu.Item as={NavLink} to='/' >
+          <img src='https://react.semantic-ui.com/logo.png' width='20px' />
+        </Menu.Item>
+
+        {this.props.authenticated ?
+          (<Menu.Item name='Dashboard' active={activeItem === 'Dashboard'} as={NavLink} to='/' onClick={this.handleItemClick} />)
+          : false
+        }
+        {this.props.authenticated ?
+          (
+            <Menu.Item
+              name='contacts'
+              active={activeItem === 'contacts'}
+              onClick={this.handleItemClick}
+              as={NavLink}
+              to="customers"
+            />
+          )
+          : false
+        }
+
+        <Menu.Menu position='right'>
+          {this.props.authenticated ?
+            (<Dropdown item text={`${this.props.user.first_name} ${this.props.user.last_name}`}>
+              <Dropdown.Menu>
+                <Dropdown.Item as={NavLink} to='settings'>Settings</Dropdown.Item>
+                <Dropdown.Item onClick={this.props.logOut}>Logout</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>)
+            :
+            (<Menu.Item as={NavLink} to='signup'>
+              <Button color='teal'>Sign Up</Button>
+            </Menu.Item>)}
+        </Menu.Menu>
+      </Menu>
+    )
+  }
+}
+
+export default App;

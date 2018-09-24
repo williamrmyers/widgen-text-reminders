@@ -86,6 +86,7 @@ class AppRouter extends Component {
       token: response.data.token,
       user: { email: response.data.email }
     }));
+    this.getUserData();
   }
   //this should make a request to the server to see if the token stored in the cookie is valid, and if so log us in.
   checkIfAutheticated = () => {
@@ -100,7 +101,8 @@ class AppRouter extends Component {
               .then((response) => {
                 this.setState(() => ({
                   authenticated: true,
-                  token: token
+                  token: token,
+                  user: response.data
                 }));
 
                 auth.authenticate(token, () => {
@@ -114,6 +116,21 @@ class AppRouter extends Component {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  getUserData = () => {
+    const authHeaders = {
+      headers: {'x-auth': this.state.token }
+    };
+    axios.get('/users/me', authHeaders)
+      .then((response) => {
+        this.setState(() => ({
+          user: response.data
+        }));
+      })
+      .catch((error) => {
+        console.log(`couldn't get user data`);
+      });
   }
 
   componentWillMount() {

@@ -3,6 +3,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 import NameChangeModal from './namechangemodal';
 import Confirmation from './reusableComponents/confirmation'
+import {Link} from 'react-router-dom';
 
 
 class Settings extends React.Component {
@@ -111,6 +112,7 @@ render () {
                           <strong>First Name:</strong> {this.state.firstName} <br/>
                           <strong>Last Name:</strong> {this.state.lastName} <br/>
                           <strong>Email</strong>: {this.state.email} <br/>
+                          <Link to='messages'>Messages</Link> <br></br>
                           <a onClick={this.toggleNameModal} className="button">Change Info</a> <br/>
                         </p>
                       {this.state.deleteModalclosed?
