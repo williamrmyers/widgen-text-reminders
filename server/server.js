@@ -198,7 +198,10 @@ app.get('/appointment/:id', authenticate, async (req, res) => {
   await Appointment.findOne({
     _id: id,
     _owner: req.user._id
-  }).then((appointment) => {
+  })
+  .populate('customer')
+  .populate('message')
+  .then((appointment) => {
     if (!appointment) {
       return res.status(404).send({});
     }
@@ -221,9 +224,9 @@ app.post(`/appointment`, authenticate, async (req, res) =>{
     message: body.message
   });
 
-  // if (!ObjectID.isValid(appointment.customer) && !ObjectID.isValid(appointment.message)) {
-  //   return res.status(404).send({});
-  // }
+  if (!ObjectID.isValid(appointment.customer) || !ObjectID.isValid(appointment.message)) {
+    return res.status(404).send({});
+  }
 
   try {
         await appointment.save().then((doc) => {

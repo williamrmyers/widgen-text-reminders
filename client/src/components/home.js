@@ -27,7 +27,8 @@ class Home extends React.Component {
       events: [],
       modalIsOpen: false,
       formStart: false,
-      formEnd: false
+      formEnd: false,
+      appointment: false
   };
 // Appointments handelers
 getAppointments = () => {
@@ -47,46 +48,20 @@ getAppointments = () => {
   });
 }
 
-postAppointments = () => {
+getAppointmentById = (id) => {
   const authHeaders = {
     headers: { 'x-auth': this.props.token }
   };
-  const body = {
-  	"text": "Meet with Jacky",
-  	"start": new Date(),
-    "end": moment().add(1, 'hours').toDate(),
-  	"customer": "5b92f34860687de21bcdbea4"
-  }
-
-  axios.post('/appointment', body, authHeaders).then((res)=>{
-      this.getAppointments();
-  }).catch((error)=>{
-    console.log(error);
-  });
-}
-postAppointments2 = (e) => {
-  e.preventDefault();
-
-  const authHeaders = {
-    headers: { 'x-auth': this.props.token }
-  };
-  const el = e.target.elements;
-
-  const body = {
-  	"text": el.text.value.trim(),
-  	"start": el.start.value.trim(),
-    "end": el.end.value.trim(),
-  	"customer": el.customer.value.trim()
-  }
-
-  axios.post('/appointment', body, authHeaders).then((res)=>{
-      this.getAppointments();
-  }).catch((error)=>{
-    console.log(error);
+  axios.get(`/appointment/${id}`, authHeaders)
+    .then((res) => {
+      this.setState(() => ({ appointment: res.data.appointment }));
+    })
+    .catch((error) => {
+      console.log(error);
   });
 }
 
-postAppointments3 = (body) => {
+postAppointment = (body) => {
   const authHeaders = {
     headers: { 'x-auth': this.props.token }
   };
@@ -99,17 +74,14 @@ postAppointments3 = (body) => {
   });
 }
 
-patchAppointments = (id, name) => {
+patchAppointment = (body) => {
   const authHeaders = {
     headers: { 'x-auth': this.props.token }
   };
-  const body = {
-  	"message":`Meet with ${name}`,
-  	"date": 1536465944,
-  	"customer": "5b92f34860687de21bcdbea4"
-  }
+  const id = body.id;
 
   axios.patch(`/appointment/${id}`, body, authHeaders).then((res)=>{
+      this.toggleModal();
       this.getAppointments();
   }).catch((error)=>{
     console.log(error);
@@ -161,19 +133,22 @@ getCustomers = () => {
 }
 
 createAppointment = (data) => {
+  // Clears the modify appointment data
+  this.setState(() => ({appointment: false }));
   this.setState(() => ({ formStart: data.start, formEnd: data.end}));
   this.toggleModal();
   console.log('Created:',data);
 }
 
 modifyAppointment = (data) => {
-  this.setState(() => ({ formStart: data.start, formEnd: data.end }));
+  this.setState(() => ({ formStart: data.start, formEnd: data.end}));
   console.log(data);
+  this.getAppointmentById(data.id);
   this.toggleModal();
 }
 
 closeModal = () => {
-  this.setState(() => ({modalIsOpen: false}));
+  this.setState(() => ({modalIsOpen: false }));
 }
 
 toggleModal = (state) => {
@@ -206,14 +181,18 @@ toggleModal = (state) => {
                   // onRequestClose={this.closeModal}
                   style={customStyles}
                   contentLabel="Create or modify Appointment modal."
+                  onRequestClose={() => console.log(`onRequestClose`)}
                 >
                 <EventForm
                   messages={this.state.messages}
                   customers={this.state.customers}
-                  postAppointments={this.postAppointments3}
+                  postAppointment={this.postAppointment}
+                  patchAppointment={this.patchAppointment}
                   formStart={this.state.formStart}
                   formEnd={this.state.formEnd}
                   toggleModal={this.toggleModal}
+                  appointment={this.state.appointment}
+                  closeModal={this.closeModal}
                   />
                 </Modal>
             </div>

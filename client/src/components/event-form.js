@@ -19,24 +19,25 @@ class EventForm extends React.Component {
       text,
       start: this.props.formStart,
       end: this.props.formEnd,
-      messages: this.state.message,
+      message: this.state.message,
       customer: this.state.customer
     }
-    this.props.postAppointments(body);
+    // If the appointment object exists in props we patch the appointment, otherwise we create a new one.
+    const appointment = this.props.appointment
+     if (appointment) {
+       body.id = appointment._id;
+       this.props.patchAppointment(body);
+     } else {
+      this.props.postAppointment(body);
+     }
   }
 
   // handleChange = (e, { value }) => console.log({ value });
   selectCustomer = (e, { value }) => {
     this.setState({ customer: value });
-    this.perdictName(value);
   };
 
   selectMessage = (e, { value }) => this.setState({ message: value });
-
-  perdictName = (customer, prevState) => {
-    const title = `Appointment with ${this.state.customer}.`;
-      this.setState({ perdict: title });
-  };
 
   render() {
     // Parses the arrays for forms
@@ -54,15 +55,15 @@ class EventForm extends React.Component {
         <Form onSubmit = {this.handelSubmit}>
           <Form.Field>
             <label>Appointment Name</label>
-            <input placeholder='Appointment Name' name='title' defaultValue={this.state.perdict}/>
+            <input placeholder='Appointment Name' defaultValue={this.props.appointment? this.props.appointment.text: null} name='title' />
           </Form.Field>
           <Form.Field>
             <Checkbox defaultChecked name="notification" label='Send customer notification an hour before appointment' />
           </Form.Field>
-          <Form.Field required control={Select} fluid search selection label='Customer' options={parsedCustomers} onChange={this.selectCustomer} placeholder='Customer' />
-          <Form.Field required control={Select} fluid search selection label='Message' options={parsedMessages} onChange={this.selectMessage} placeholder='Message' />
+            <Form.Field required control={Select} fluid search selection label='Customer' defaultValue={this.props.appointment?this.props.appointment.customer._id:null}  options={parsedCustomers} onChange={this.selectCustomer} placeholder='Customer' />
+            <Form.Field required control={Select} fluid search selection label='Message' defaultValue={this.props.appointment?this.props.appointment.message._id:null}  options={parsedMessages} onChange={this.selectMessage} placeholder='Message' />
           <Button secondary type='submit'>Submit</Button>
-          <Button onClick={this.props.toggleModal} >Close</Button>
+          <Button onClick={this.props.closeModal} >Close</Button>
         </Form>
       </div>
     );

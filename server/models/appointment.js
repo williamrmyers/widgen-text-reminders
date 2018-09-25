@@ -22,12 +22,12 @@ const Appointment = mongoose.model('appointments', {
     ref: 'Customers'
   },
   message: {
-    type: mongoose.Schema.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Messages'
   },
   text: {
     type: String,
-    trim: true,
-    minlength: 1
+    trim: true
   },
   reminderSent: {
     type: Boolean,
