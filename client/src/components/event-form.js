@@ -28,7 +28,7 @@ class EventForm extends React.Component {
        body.id = appointment._id;
        this.props.patchAppointment(body);
      } else {
-      this.props.postAppointment(body);
+       this.props.postAppointment(body);
      }
   }
 

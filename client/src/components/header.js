@@ -31,7 +31,18 @@ class Header extends React.Component {
           )
           : false
         }
-
+        {this.props.authenticated ?
+          (
+            <Menu.Item
+              name='Messages'
+              as={NavLink}
+              to="/messages"
+              activeClassName="active"
+              exact
+            />
+          )
+          : false
+        }
         <Menu.Menu position='right'>
           {this.props.authenticated ?
             (<Dropdown item text={`${this.props.user.first_name} ${this.props.user.last_name}`}>
