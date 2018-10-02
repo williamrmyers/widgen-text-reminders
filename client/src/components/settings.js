@@ -110,7 +110,6 @@ render () {
           <strong>First Name:</strong>{this.state.firstName}<br/>
           <strong>Last Name:</strong>{this.state.lastName}<br/>
           <strong>Email:</strong>{this.state.email}<br/>
-          <Button as={Link} to='messages'>Messages</Button><br/><br/>
           <Button onClick={this.toggleNameModal}>Change Profile Info</Button><br/><br/>
 
             {this.state.deleteModalclosed?

@@ -11,10 +11,10 @@ render () {
     <div>
         <header>
           <div className="overlay"></div>
-          <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+          <video playsInline="playsInline" autoPlay="autoPlay" muted="muted" loop="loop">
             <source src="https://i.imgur.com/sWe6Gjd.mp4" type="video/mp4" />
           </video>
-          <div class="container h-100">
+          <div className="container h-100">
             <div className="video-text">
                   <h1>Widgen</h1>
                   <p>Remind your patients about their appoinments and reduce no shows.</p>

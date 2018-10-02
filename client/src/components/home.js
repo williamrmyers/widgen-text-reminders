@@ -89,21 +89,16 @@ patchAppointment = (body) => {
   });
 }
 
-deleteAppointments = (id) => {
+deleteAppointment = (id) => {
   const authHeaders = {
     headers: { 'x-auth': this.props.token }
   };
   axios.delete(`/appointment/${id}`, authHeaders).then((res)=>{
+      this.closeModal();
       this.getAppointments();
   }).catch((error)=>{
     console.log(error);
   });
-}
-
-handleDelete = (data) => {
-  const id = data.id;
-  console.log(id);
-  this.deleteAppointments(id);
 }
 
 getMessages = () => {
@@ -194,6 +189,7 @@ toggleModal = (state) => {
                   toggleModal={this.toggleModal}
                   appointment={this.state.appointment}
                   closeModal={this.closeModal}
+                  deleteAppointment={this.deleteAppointment}
                   />
                 </Modal>
             </div>

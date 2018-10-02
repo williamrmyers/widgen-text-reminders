@@ -10,6 +10,7 @@ class EventForm extends React.Component {
   }
 
   handelSubmit = (e, { value }) => {
+    e.preventDefault();
     const el = e.target.elements;
     const notification = el.notification.checked;
     const text = el.title.value.trim();
@@ -23,13 +24,19 @@ class EventForm extends React.Component {
       customer: this.state.customer
     }
     // If the appointment object exists in props we patch the appointment, otherwise we create a new one.
-    const appointment = this.props.appointment
+    const appointment = this.props.appointment;
      if (appointment) {
        body.id = appointment._id;
        this.props.patchAppointment(body);
      } else {
        this.props.postAppointment(body);
      }
+  }
+
+  handleDelete = (e, data) => {
+    e.preventDefault();
+    const id = this.props.appointment._id;
+    this.props.deleteAppointment(id);
   }
 
   // handleChange = (e, { value }) => console.log({ value });
@@ -64,6 +71,9 @@ class EventForm extends React.Component {
             <Form.Field required control={Select} fluid search selection label='Message' defaultValue={this.props.appointment?this.props.appointment.message._id:null}  options={parsedMessages} onChange={this.selectMessage} placeholder='Message' />
           <Button secondary type='submit'>Submit</Button>
           <Button onClick={this.props.closeModal} >Close</Button>
+          {this.props.appointment?
+            (<Button onClick={this.handleDelete} color='red' >Delete Event</Button>): null
+          }
         </Form>
       </div>
     );
