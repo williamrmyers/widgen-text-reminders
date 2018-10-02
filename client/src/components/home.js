@@ -129,11 +129,16 @@ getCustomers = () => {
 }
 
 createAppointment = (data) => {
-  // Clears the modify appointment data
-  this.setState(() => ({appointment: false }));
-  this.setState(() => ({ formStart: data.start, formEnd: data.end}));
-  this.toggleModal();
-  console.log('Created:',data);
+  // Check if there are Customers and Messages.
+  if (this.state.messages.length === 0 || this.state.customers.length === 0) {
+    alert(`You need to add at least one Message and one Contact to create an Appointment`);
+  } else {
+    // Clears the modify appointment data
+    this.setState(() => ({appointment: false }));
+    this.setState(() => ({ formStart: data.start, formEnd: data.end}));
+    this.toggleModal();
+    console.log('Created:',data);
+  }
 }
 
 modifyAppointment = (data) => {
