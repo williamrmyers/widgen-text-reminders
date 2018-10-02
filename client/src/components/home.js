@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 
 import Calender from './calender';
 import EventForm from './event-form';
+import LandingPage from './landingpage';
 
 const customStyles = {
   content : {
@@ -199,15 +200,9 @@ toggleModal = (state) => {
           )
           :
           (
-            <section className="section">
-            <div className="hero">
-              <div className="hero-body">
-                <div className="container has-text-centered content">
-                    <h1 className="big-header">Welcome!</h1>
-                </div>
-              </div>
+            <div>
+              <LandingPage />
             </div>
-          </section>
           )
         }
       </div>

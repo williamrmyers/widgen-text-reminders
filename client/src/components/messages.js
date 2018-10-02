@@ -115,6 +115,7 @@ class Messages extends React.Component {
             <Button onClick={this.toggleAddForm} color='teal'>Add New Reminder Message</Button>
           )}
 
+          <h1>Messages</h1>
           {this.state.messages.map(message => (<div key={message._id}>
             <Container>
               <Dropdown item text='Edit'>
@@ -124,7 +125,7 @@ class Messages extends React.Component {
                 </Dropdown.Menu>
               </Dropdown>
 
-              <h2>{message.title}</h2>
+              <h3>{message.title}</h3>
               <p>{message.message}</p>
             </Container><br />
             <Divider />

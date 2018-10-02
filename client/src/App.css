@@ -1,4 +1,4 @@
-.big-header {
+/*.big-header {
   font-size: 40px;
 }
 
@@ -6,10 +6,86 @@
 div.formBox {
     max-width:500px;
     margin: auto;
+}*/
+
+
+/*Landing Page*/
+.flex-container {
+  display: flex;
+  flex-direction: row;
+
+  background: linear-gradient
+  (rgba(20, 20, 20, .5),
+   rgba(20, 20, 20, .5)),
+  url("https://dzwonsemrish7.cloudfront.net/items/283Q221p1g1g391E2m0L/Screen%20Recording%202018-09-30%20at%2004.28%20PM.gif?v=3491d3bb");
+}
+.landing-box {
+  width: 100%;
 }
 
-div.addButtom {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
+.landing-box img {
+  max-width: 300px;
+  height: auto;
+}
+
+@media all and (max-width: 700px) {
+    .flex-container {
+        flex-direction: column;
+    }
+}
+
+
+.video-text {
+  text-align: center;
+  padding-top: 70px;
+  color: white;
+}
+
+header {
+  position: relative;
+  background-color: black;
+  height: 75vh;
+  min-height: 25rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+header video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 0;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+header .container {
+  position: relative;
+  z-index: 2;
+}
+
+header .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  opacity: 0.4;
+  z-index: 1;
+}
+
+@media (pointer: coarse) and (hover: none) {
+  header {
+    background: url('https://source.unsplash.com/XT5OInaElMw/1600x900') black no-repeat center center scroll;
+  }
+  header video {
+    display: none;
+  }
 }

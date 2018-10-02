@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Segment, Form } from 'semantic-ui-react'
+import { Container, Segment, Form, Button } from 'semantic-ui-react'
 import axios from 'axios';
 
 class Customers extends React.Component {
@@ -74,19 +74,19 @@ class Customers extends React.Component {
               <Form.Input fluid name='phone' type='phone' label='Phone' placeholder='Phone' />
               <Form.Input fluid name='email' type='email' label='Email'placeholder='Email' />
             </Form.Group>
-            <Form.Button>Submit</Form.Button>
+            <Form.Group>
+              <Form.Button>Add</Form.Button>
+              <Button onClick={this.toggleAddForm}>Close</Button>
+            </Form.Group>
           </Form>
         </div>
-        ): false}
+      ): (<Button onClick={this.toggleAddForm} color='teal'>Add New Contact</Button>)}
 
         <h1>Contacts</h1>
         <Segment.Group raised>
           {this.state.customers.map(customer => (<Segment key={customer._id}>{customer.first_name} {customer.last_name}  {customer.phone}</Segment>))}
         </Segment.Group>
     </Container>
-      <div className='addButtom'>
-        <button onClick={this.toggleAddForm}>Add</button>
-      </div>
     </div>
     );
   }

@@ -55,7 +55,7 @@ class EventForm extends React.Component {
         <Form onSubmit = {this.handelSubmit}>
           <Form.Field>
             <label>Appointment Name</label>
-            <input placeholder='Appointment Name' defaultValue={this.props.appointment? this.props.appointment.text: null} name='title' />
+            <input placeholder='Appointment Name'  autoComplete="false" defaultValue={this.props.appointment? this.props.appointment.text: null} name='title' />
           </Form.Field>
           <Form.Field>
             <Checkbox defaultChecked name="notification" label='Send customer notification an hour before appointment' />
