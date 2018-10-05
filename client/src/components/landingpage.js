@@ -17,7 +17,7 @@ render () {
           <div className="container h-100">
             <div className="video-text">
                   <h1>Widgen</h1>
-                  <p>Remind your patients about their appoinments and reduce no shows.</p>
+                  <p>Send text reminders to your patients about their appoinments and reduce no shows.</p>
                   <Button as={Link} to='signup' color='teal'>Sign Up</Button>
             </div>
           </div>
