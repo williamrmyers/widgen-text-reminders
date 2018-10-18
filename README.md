@@ -1,8 +1,8 @@
-# boilerplate_node_api_with_auth
+# widgen-text-reminders
 
 Get Started
 ```
-clone "https://github.com/williamrmyers/boilerplate_node_api_with_auth"
+clone https://github.com/williamrmyers/widgen-text-reminders
 npm install
 cd client
 npm install
