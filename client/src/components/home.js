@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import moment from 'moment';
 import Modal from 'react-modal';
 
 import Calender from './calender';

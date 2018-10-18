@@ -1,8 +1,6 @@
 import React from 'react';
-import { Container, Header, Button } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-
-import Signup from './signup';
 
 class LandingPage extends React.Component {
 

@@ -12,7 +12,7 @@ class Header extends React.Component {
     return (
       <Menu size='small' inverted>
         <Menu.Item as={Link} to='/' >
-          <img src='https://react.semantic-ui.com/logo.png' width='20px' />
+          <img src='https://react.semantic-ui.com/logo.png' alt='Logo' width='20px' />
         </Menu.Item>
 
         {this.props.authenticated ?

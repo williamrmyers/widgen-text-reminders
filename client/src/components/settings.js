@@ -1,8 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
-import { Container, Header, Button } from 'semantic-ui-react'
-import {Link} from 'react-router-dom';
+import { Container, Header, Button } from 'semantic-ui-react';
 
 import NameChangeModal from './namechangemodal';
 import Confirmation from './reusableComponents/confirmation'

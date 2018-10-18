@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox, Form, Dropdown, Select, Header, Segment } from 'semantic-ui-react'
+import { Button, Checkbox, Form, Select, Header } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import moment from 'moment';
 
