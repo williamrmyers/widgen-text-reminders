@@ -6,7 +6,8 @@ class Messages extends React.Component {
 
   state = {
     messages: [],
-    formVisible: false
+    formVisible: false,
+    editMessage: {}
   }
 
   getMessages = () => {
@@ -19,8 +20,8 @@ class Messages extends React.Component {
     })
     .catch((error) => {
       this.error(error);
-  });
-}
+    });
+  }
 
   postMessage = (body) => {
     const authHeaders = {
@@ -60,21 +61,36 @@ class Messages extends React.Component {
   }
 
   handelEdit = (e) => {
+    this.toggleAddForm();
     console.log('handelEdit', e.target.id);
+    const message = this.state.messages.filter(message => message._id === e.target.id)
+    console.log(this.state.messages);
+    console.log({message});
+    this.setState(() => ({ editMessage: message[0]}));
   }
 
   handelDelete = (e) => {
     const id = e.target.id;
-    console.log(id);
-    this.deleteMessage(id)
+    console.log('handelDelete', id);
+    this.deleteMessage(id);
   }
 
   error = (e) => {
     alert(e);
   }
 
-  toggleAddForm = (state) => {
+  toggleAddForm = (e, state) => {
+    if (e) {
+      e.preventDefault();
+    }
     this.setState(() => ({ formVisible: this.state.formVisible ? false : true }));
+  }
+
+  openAddForm = (state) => {
+    this.setState(() => ({ formVisible: true }));
+  }
+  closeAddForm = (state) => {
+    this.setState(() => ({ formVisible: true }));
   }
 
   componentWillMount() {
