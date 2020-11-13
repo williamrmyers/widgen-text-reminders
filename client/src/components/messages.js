@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, TextArea, Button, Container, Divider, Dropdown } from 'semantic-ui-react'
 import axios from 'axios';
+import * as woopra from "./tracker/woopra";
 
 class Messages extends React.Component {
 
@@ -46,6 +47,7 @@ class Messages extends React.Component {
       el.reminderTitle.value = '';
       el.reminderText.value = '';
     }
+    window.woopra.track('Created Message');
   }
 
   deleteMessage = (id) => {

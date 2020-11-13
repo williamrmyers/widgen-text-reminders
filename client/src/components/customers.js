@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Segment, Form, Button } from 'semantic-ui-react'
 import axios from 'axios';
+import * as woopra from "./tracker/woopra";
 
 class Customers extends React.Component {
 
@@ -33,7 +34,13 @@ class Customers extends React.Component {
       el.lastName.value = '';
       el.phone.value = '';
       el.email.value = '';
-    }
+      }
+    window.woopra.track("Created Customer", {
+      customer_email: email,
+      customer_firstname: firstName,
+      customer_lastname: lastName,
+      customer_phone: phone
+    });
   }
 
   getCustomers = () => {

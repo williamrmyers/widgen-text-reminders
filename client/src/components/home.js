@@ -6,6 +6,8 @@ import Calender from './calender';
 import EventForm from './event-form';
 import LandingPage from './landingpage';
 
+import * as woopra from "./tracker/woopra";
+
 const customStyles = {
   content : {
     top                   : '50%',
@@ -69,9 +71,11 @@ postAppointment = (body) => {
   axios.post('/appointment', body, authHeaders).then((res)=>{
       this.toggleModal();
       this.getAppointments();
+      console.log({res});
   }).catch((error)=>{
     console.log(error);
   });
+  window.woopra.track("Created Appointment");
 }
 
 patchAppointment = (body) => {

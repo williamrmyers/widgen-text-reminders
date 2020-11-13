@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 import { Container, Header, Button } from 'semantic-ui-react';
+import * as woopra from "./tracker/woopra";
 
 import NameChangeModal from './namechangemodal';
 import Confirmation from './reusableComponents/confirmation'
@@ -101,14 +102,18 @@ class Settings extends React.Component {
       });
   }
 
+  handleSubscribe = () => {
+    window.woopra.track("Subscribed");
+  }
+
 
 render () {
   return (
     <Container textAlign='center' text>
       <Header as='h2'>Settings</Header>
-          <strong>First Name:</strong>{this.state.firstName}<br/>
-          <strong>Last Name:</strong>{this.state.lastName}<br/>
-          <strong>Email:</strong>{this.state.email}<br/>
+          <strong>First Name: </strong>{this.state.firstName}<br/>
+          <strong>Last Name: </strong>{this.state.lastName}<br/>
+          <strong>Email: </strong>{this.state.email}<br/>
           <Button onClick={this.toggleNameModal}>Change Profile Info</Button><br/><br/>
 
             {this.state.deleteModalclosed?
@@ -133,6 +138,11 @@ render () {
               />
 
           { this.state.redirect ? <meta httpEquiv="refresh" content="0; URL='/'" /> : null}
+
+      <br></br>
+      <br></br>
+      <br></br>
+      <Button color='teal' onClick={this.handleSubscribe}>Subscribe</Button>
     </Container>
   )}
 };
