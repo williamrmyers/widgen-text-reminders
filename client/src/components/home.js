@@ -164,6 +164,7 @@ toggleModal = (state) => {
       this.getAppointments();
       this.getMessages();
       this.getCustomers();
+      window.woopra.track("Viewed Calender");
     }
   }
 
