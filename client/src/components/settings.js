@@ -142,7 +142,14 @@ render () {
       <br></br>
       <br></br>
       <br></br>
-      <Button color='teal' onClick={this.handleSubscribe}>Subscribe</Button>
+      <h2>Subscribe</h2>
+      <Button color='yellow' onClick={() => window.woopra.track("Subscribed", {plan: 'gold'})}>Subscribe Gold</Button>
+      <br></br>
+      <br></br>
+      <Button color='violet' onClick={() => window.woopra.track("Subscribed", {plan: 'standard'})}>Subscribe Standard</Button>
+      <br></br>
+      <br></br>
+      <Button color='standard' onClick={() => window.woopra.track("Subscribed", {plan: 'starter'})}>Subscribe Starter</Button>
     </Container>
   )}
 };
