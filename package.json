@@ -23,7 +23,7 @@
     "moment": "^2.22.2",
     "mongoose": "^5.9.4",
     "twilio": "^3.19.2",
-    "validator": "^10.3.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "concurrently": "^3.6.1",
